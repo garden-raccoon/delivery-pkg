@@ -1,0 +1,23 @@
+syntax = "proto3";
+package models;
+
+option go_package = "protocols/delivery-pkg";
+
+import "delivery-pkg-models.proto";
+
+service DeliveryService {
+    rpc CreateOrUpdateDelivery(models.Delivery) returns(EmptyDelivery);
+    rpc GetDeliveries(EmptyDelivery) returns(models.Deliveries);
+    rpc DeliveryById(DeliveryGetReq) returns(models.Delivery);
+
+    rpc DeleteDelivery(DeliveryDeleteReq) returns(EmptyDelivery);
+
+}
+message DeliveryGetReq {
+    bytes delivery_uuid = 1;
+}
+message DeliveryDeleteReq {
+    bytes delivery_uuid = 1;
+}
+message EmptyDelivery {}
+

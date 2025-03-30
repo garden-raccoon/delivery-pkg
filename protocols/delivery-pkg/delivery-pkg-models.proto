@@ -1,0 +1,12 @@
+syntax = "proto3";
+package models;
+
+option go_package = "protocols/delivery-pkg";
+
+message Delivery {
+    bytes           delivery_uuid        = 1;
+}
+
+message Deliveries {
+    repeated Delivery Deliveries = 1;
+}
