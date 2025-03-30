@@ -24,6 +24,7 @@ const (
 type Delivery struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	DeliveryUuid  []byte                 `protobuf:"bytes,1,opt,name=delivery_uuid,json=deliveryUuid,proto3" json:"delivery_uuid,omitempty"`
+	OrderUuid     []byte                 `protobuf:"bytes,2,opt,name=order_uuid,json=orderUuid,proto3" json:"order_uuid,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -61,6 +62,13 @@ func (*Delivery) Descriptor() ([]byte, []int) {
 func (x *Delivery) GetDeliveryUuid() []byte {
 	if x != nil {
 		return x.DeliveryUuid
+	}
+	return nil
+}
+
+func (x *Delivery) GetOrderUuid() []byte {
+	if x != nil {
+		return x.OrderUuid
 	}
 	return nil
 }
@@ -113,9 +121,11 @@ var File_delivery_pkg_models_proto protoreflect.FileDescriptor
 
 const file_delivery_pkg_models_proto_rawDesc = "" +
 	"\n" +
-	"\x19delivery-pkg-models.proto\x12\x06models\"/\n" +
+	"\x19delivery-pkg-models.proto\x12\x06models\"N\n" +
 	"\bDelivery\x12#\n" +
-	"\rdelivery_uuid\x18\x01 \x01(\fR\fdeliveryUuid\">\n" +
+	"\rdelivery_uuid\x18\x01 \x01(\fR\fdeliveryUuid\x12\x1d\n" +
+	"\n" +
+	"order_uuid\x18\x02 \x01(\fR\torderUuid\">\n" +
 	"\n" +
 	"Deliveries\x120\n" +
 	"\n" +

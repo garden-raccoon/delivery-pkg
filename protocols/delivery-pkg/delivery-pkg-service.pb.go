@@ -65,6 +65,50 @@ func (x *DeliveryGetReq) GetDeliveryUuid() []byte {
 	return nil
 }
 
+type DeliveryGetReqByOrder struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OrderUuid     []byte                 `protobuf:"bytes,1,opt,name=order_uuid,json=orderUuid,proto3" json:"order_uuid,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeliveryGetReqByOrder) Reset() {
+	*x = DeliveryGetReqByOrder{}
+	mi := &file_delivery_pkg_service_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeliveryGetReqByOrder) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeliveryGetReqByOrder) ProtoMessage() {}
+
+func (x *DeliveryGetReqByOrder) ProtoReflect() protoreflect.Message {
+	mi := &file_delivery_pkg_service_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeliveryGetReqByOrder.ProtoReflect.Descriptor instead.
+func (*DeliveryGetReqByOrder) Descriptor() ([]byte, []int) {
+	return file_delivery_pkg_service_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *DeliveryGetReqByOrder) GetOrderUuid() []byte {
+	if x != nil {
+		return x.OrderUuid
+	}
+	return nil
+}
+
 type DeliveryDeleteReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	DeliveryUuid  []byte                 `protobuf:"bytes,1,opt,name=delivery_uuid,json=deliveryUuid,proto3" json:"delivery_uuid,omitempty"`
@@ -74,7 +118,7 @@ type DeliveryDeleteReq struct {
 
 func (x *DeliveryDeleteReq) Reset() {
 	*x = DeliveryDeleteReq{}
-	mi := &file_delivery_pkg_service_proto_msgTypes[1]
+	mi := &file_delivery_pkg_service_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -86,7 +130,7 @@ func (x *DeliveryDeleteReq) String() string {
 func (*DeliveryDeleteReq) ProtoMessage() {}
 
 func (x *DeliveryDeleteReq) ProtoReflect() protoreflect.Message {
-	mi := &file_delivery_pkg_service_proto_msgTypes[1]
+	mi := &file_delivery_pkg_service_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -99,7 +143,7 @@ func (x *DeliveryDeleteReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeliveryDeleteReq.ProtoReflect.Descriptor instead.
 func (*DeliveryDeleteReq) Descriptor() ([]byte, []int) {
-	return file_delivery_pkg_service_proto_rawDescGZIP(), []int{1}
+	return file_delivery_pkg_service_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *DeliveryDeleteReq) GetDeliveryUuid() []byte {
@@ -117,7 +161,7 @@ type EmptyDelivery struct {
 
 func (x *EmptyDelivery) Reset() {
 	*x = EmptyDelivery{}
-	mi := &file_delivery_pkg_service_proto_msgTypes[2]
+	mi := &file_delivery_pkg_service_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -129,7 +173,7 @@ func (x *EmptyDelivery) String() string {
 func (*EmptyDelivery) ProtoMessage() {}
 
 func (x *EmptyDelivery) ProtoReflect() protoreflect.Message {
-	mi := &file_delivery_pkg_service_proto_msgTypes[2]
+	mi := &file_delivery_pkg_service_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -142,7 +186,7 @@ func (x *EmptyDelivery) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EmptyDelivery.ProtoReflect.Descriptor instead.
 func (*EmptyDelivery) Descriptor() ([]byte, []int) {
-	return file_delivery_pkg_service_proto_rawDescGZIP(), []int{2}
+	return file_delivery_pkg_service_proto_rawDescGZIP(), []int{3}
 }
 
 var File_delivery_pkg_service_proto protoreflect.FileDescriptor
@@ -151,14 +195,18 @@ const file_delivery_pkg_service_proto_rawDesc = "" +
 	"\n" +
 	"\x1adelivery-pkg-service.proto\x12\x06models\x1a\x19delivery-pkg-models.proto\"5\n" +
 	"\x0eDeliveryGetReq\x12#\n" +
-	"\rdelivery_uuid\x18\x01 \x01(\fR\fdeliveryUuid\"8\n" +
+	"\rdelivery_uuid\x18\x01 \x01(\fR\fdeliveryUuid\"6\n" +
+	"\x15DeliveryGetReqByOrder\x12\x1d\n" +
+	"\n" +
+	"order_uuid\x18\x01 \x01(\fR\torderUuid\"8\n" +
 	"\x11DeliveryDeleteReq\x12#\n" +
 	"\rdelivery_uuid\x18\x01 \x01(\fR\fdeliveryUuid\"\x0f\n" +
-	"\rEmptyDelivery2\x8e\x02\n" +
+	"\rEmptyDelivery2\xdc\x02\n" +
 	"\x0fDeliveryService\x12A\n" +
 	"\x16CreateOrUpdateDelivery\x12\x10.models.Delivery\x1a\x15.models.EmptyDelivery\x12:\n" +
-	"\rGetDeliveries\x12\x15.models.EmptyDelivery\x1a\x12.models.Deliveries\x128\n" +
-	"\fDeliveryById\x12\x16.models.DeliveryGetReq\x1a\x10.models.Delivery\x12B\n" +
+	"\rGetDeliveries\x12\x15.models.EmptyDelivery\x1a\x12.models.Deliveries\x12>\n" +
+	"\x12DeliveryByDeliUuid\x12\x16.models.DeliveryGetReq\x1a\x10.models.Delivery\x12F\n" +
+	"\x13DeliveryByOrderUuid\x12\x1d.models.DeliveryGetReqByOrder\x1a\x10.models.Delivery\x12B\n" +
 	"\x0eDeleteDelivery\x12\x19.models.DeliveryDeleteReq\x1a\x15.models.EmptyDeliveryB\x18Z\x16protocols/delivery-pkgb\x06proto3"
 
 var (
@@ -173,25 +221,28 @@ func file_delivery_pkg_service_proto_rawDescGZIP() []byte {
 	return file_delivery_pkg_service_proto_rawDescData
 }
 
-var file_delivery_pkg_service_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_delivery_pkg_service_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_delivery_pkg_service_proto_goTypes = []any{
-	(*DeliveryGetReq)(nil),    // 0: models.DeliveryGetReq
-	(*DeliveryDeleteReq)(nil), // 1: models.DeliveryDeleteReq
-	(*EmptyDelivery)(nil),     // 2: models.EmptyDelivery
-	(*Delivery)(nil),          // 3: models.Delivery
-	(*Deliveries)(nil),        // 4: models.Deliveries
+	(*DeliveryGetReq)(nil),        // 0: models.DeliveryGetReq
+	(*DeliveryGetReqByOrder)(nil), // 1: models.DeliveryGetReqByOrder
+	(*DeliveryDeleteReq)(nil),     // 2: models.DeliveryDeleteReq
+	(*EmptyDelivery)(nil),         // 3: models.EmptyDelivery
+	(*Delivery)(nil),              // 4: models.Delivery
+	(*Deliveries)(nil),            // 5: models.Deliveries
 }
 var file_delivery_pkg_service_proto_depIdxs = []int32{
-	3, // 0: models.DeliveryService.CreateOrUpdateDelivery:input_type -> models.Delivery
-	2, // 1: models.DeliveryService.GetDeliveries:input_type -> models.EmptyDelivery
-	0, // 2: models.DeliveryService.DeliveryById:input_type -> models.DeliveryGetReq
-	1, // 3: models.DeliveryService.DeleteDelivery:input_type -> models.DeliveryDeleteReq
-	2, // 4: models.DeliveryService.CreateOrUpdateDelivery:output_type -> models.EmptyDelivery
-	4, // 5: models.DeliveryService.GetDeliveries:output_type -> models.Deliveries
-	3, // 6: models.DeliveryService.DeliveryById:output_type -> models.Delivery
-	2, // 7: models.DeliveryService.DeleteDelivery:output_type -> models.EmptyDelivery
-	4, // [4:8] is the sub-list for method output_type
-	0, // [0:4] is the sub-list for method input_type
+	4, // 0: models.DeliveryService.CreateOrUpdateDelivery:input_type -> models.Delivery
+	3, // 1: models.DeliveryService.GetDeliveries:input_type -> models.EmptyDelivery
+	0, // 2: models.DeliveryService.DeliveryByDeliUuid:input_type -> models.DeliveryGetReq
+	1, // 3: models.DeliveryService.DeliveryByOrderUuid:input_type -> models.DeliveryGetReqByOrder
+	2, // 4: models.DeliveryService.DeleteDelivery:input_type -> models.DeliveryDeleteReq
+	3, // 5: models.DeliveryService.CreateOrUpdateDelivery:output_type -> models.EmptyDelivery
+	5, // 6: models.DeliveryService.GetDeliveries:output_type -> models.Deliveries
+	4, // 7: models.DeliveryService.DeliveryByDeliUuid:output_type -> models.Delivery
+	4, // 8: models.DeliveryService.DeliveryByOrderUuid:output_type -> models.Delivery
+	3, // 9: models.DeliveryService.DeleteDelivery:output_type -> models.EmptyDelivery
+	5, // [5:10] is the sub-list for method output_type
+	0, // [0:5] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -209,7 +260,7 @@ func file_delivery_pkg_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_delivery_pkg_service_proto_rawDesc), len(file_delivery_pkg_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

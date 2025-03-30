@@ -5,6 +5,7 @@ option go_package = "protocols/delivery-pkg";
 
 message Delivery {
     bytes           delivery_uuid        = 1;
+    bytes           order_uuid           = 2;
 }
 
 message Deliveries {

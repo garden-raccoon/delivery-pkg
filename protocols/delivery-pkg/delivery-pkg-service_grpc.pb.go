@@ -21,7 +21,8 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	DeliveryService_CreateOrUpdateDelivery_FullMethodName = "/models.DeliveryService/CreateOrUpdateDelivery"
 	DeliveryService_GetDeliveries_FullMethodName          = "/models.DeliveryService/GetDeliveries"
-	DeliveryService_DeliveryById_FullMethodName           = "/models.DeliveryService/DeliveryById"
+	DeliveryService_DeliveryByDeliUuid_FullMethodName     = "/models.DeliveryService/DeliveryByDeliUuid"
+	DeliveryService_DeliveryByOrderUuid_FullMethodName    = "/models.DeliveryService/DeliveryByOrderUuid"
 	DeliveryService_DeleteDelivery_FullMethodName         = "/models.DeliveryService/DeleteDelivery"
 )
 
@@ -31,7 +32,8 @@ const (
 type DeliveryServiceClient interface {
 	CreateOrUpdateDelivery(ctx context.Context, in *Delivery, opts ...grpc.CallOption) (*EmptyDelivery, error)
 	GetDeliveries(ctx context.Context, in *EmptyDelivery, opts ...grpc.CallOption) (*Deliveries, error)
-	DeliveryById(ctx context.Context, in *DeliveryGetReq, opts ...grpc.CallOption) (*Delivery, error)
+	DeliveryByDeliUuid(ctx context.Context, in *DeliveryGetReq, opts ...grpc.CallOption) (*Delivery, error)
+	DeliveryByOrderUuid(ctx context.Context, in *DeliveryGetReqByOrder, opts ...grpc.CallOption) (*Delivery, error)
 	DeleteDelivery(ctx context.Context, in *DeliveryDeleteReq, opts ...grpc.CallOption) (*EmptyDelivery, error)
 }
 
@@ -63,10 +65,20 @@ func (c *deliveryServiceClient) GetDeliveries(ctx context.Context, in *EmptyDeli
 	return out, nil
 }
 
-func (c *deliveryServiceClient) DeliveryById(ctx context.Context, in *DeliveryGetReq, opts ...grpc.CallOption) (*Delivery, error) {
+func (c *deliveryServiceClient) DeliveryByDeliUuid(ctx context.Context, in *DeliveryGetReq, opts ...grpc.CallOption) (*Delivery, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Delivery)
-	err := c.cc.Invoke(ctx, DeliveryService_DeliveryById_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, DeliveryService_DeliveryByDeliUuid_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *deliveryServiceClient) DeliveryByOrderUuid(ctx context.Context, in *DeliveryGetReqByOrder, opts ...grpc.CallOption) (*Delivery, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Delivery)
+	err := c.cc.Invoke(ctx, DeliveryService_DeliveryByOrderUuid_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -89,7 +101,8 @@ func (c *deliveryServiceClient) DeleteDelivery(ctx context.Context, in *Delivery
 type DeliveryServiceServer interface {
 	CreateOrUpdateDelivery(context.Context, *Delivery) (*EmptyDelivery, error)
 	GetDeliveries(context.Context, *EmptyDelivery) (*Deliveries, error)
-	DeliveryById(context.Context, *DeliveryGetReq) (*Delivery, error)
+	DeliveryByDeliUuid(context.Context, *DeliveryGetReq) (*Delivery, error)
+	DeliveryByOrderUuid(context.Context, *DeliveryGetReqByOrder) (*Delivery, error)
 	DeleteDelivery(context.Context, *DeliveryDeleteReq) (*EmptyDelivery, error)
 	mustEmbedUnimplementedDeliveryServiceServer()
 }
@@ -107,8 +120,11 @@ func (UnimplementedDeliveryServiceServer) CreateOrUpdateDelivery(context.Context
 func (UnimplementedDeliveryServiceServer) GetDeliveries(context.Context, *EmptyDelivery) (*Deliveries, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetDeliveries not implemented")
 }
-func (UnimplementedDeliveryServiceServer) DeliveryById(context.Context, *DeliveryGetReq) (*Delivery, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeliveryById not implemented")
+func (UnimplementedDeliveryServiceServer) DeliveryByDeliUuid(context.Context, *DeliveryGetReq) (*Delivery, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeliveryByDeliUuid not implemented")
+}
+func (UnimplementedDeliveryServiceServer) DeliveryByOrderUuid(context.Context, *DeliveryGetReqByOrder) (*Delivery, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeliveryByOrderUuid not implemented")
 }
 func (UnimplementedDeliveryServiceServer) DeleteDelivery(context.Context, *DeliveryDeleteReq) (*EmptyDelivery, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteDelivery not implemented")
@@ -170,20 +186,38 @@ func _DeliveryService_GetDeliveries_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _DeliveryService_DeliveryById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _DeliveryService_DeliveryByDeliUuid_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeliveryGetReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DeliveryServiceServer).DeliveryById(ctx, in)
+		return srv.(DeliveryServiceServer).DeliveryByDeliUuid(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: DeliveryService_DeliveryById_FullMethodName,
+		FullMethod: DeliveryService_DeliveryByDeliUuid_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DeliveryServiceServer).DeliveryById(ctx, req.(*DeliveryGetReq))
+		return srv.(DeliveryServiceServer).DeliveryByDeliUuid(ctx, req.(*DeliveryGetReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DeliveryService_DeliveryByOrderUuid_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeliveryGetReqByOrder)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DeliveryServiceServer).DeliveryByOrderUuid(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DeliveryService_DeliveryByOrderUuid_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DeliveryServiceServer).DeliveryByOrderUuid(ctx, req.(*DeliveryGetReqByOrder))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -222,8 +256,12 @@ var DeliveryService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _DeliveryService_GetDeliveries_Handler,
 		},
 		{
-			MethodName: "DeliveryById",
-			Handler:    _DeliveryService_DeliveryById_Handler,
+			MethodName: "DeliveryByDeliUuid",
+			Handler:    _DeliveryService_DeliveryByDeliUuid_Handler,
+		},
+		{
+			MethodName: "DeliveryByOrderUuid",
+			Handler:    _DeliveryService_DeliveryByOrderUuid_Handler,
 		},
 		{
 			MethodName: "DeleteDelivery",

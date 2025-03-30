@@ -21,8 +21,9 @@ type DeliveryPkgAPI interface {
 	CreateOrUpdateDelivery(s *models.Delivery) error
 	GetDeliveries() ([]*models.Delivery, error)
 	DeleteDelivery(deliveryUuid uuid.UUID) error
-	DeliveryById(deliveryUuid uuid.UUID) (*models.Delivery, error)
+	DeliveryByDeliUuid(deliveryUuid uuid.UUID) (*models.Delivery, error)
 	HealthCheck() error
+	DeliveryByOrderUuid(orderUuid uuid.UUID) (*models.Delivery, error)
 	// Close GRPC Api connection
 	Close() error
 }
@@ -111,13 +112,28 @@ func (api *Api) initConn(addr string) (err error) {
 	return
 }
 
-func (api *Api) DeliveryById(deliveryUuid uuid.UUID) (*models.Delivery, error) {
+func (api *Api) DeliveryByDeliUuid(deliveryUuid uuid.UUID) (*models.Delivery, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), api.timeout)
 	defer cancel()
 	getReq := &proto.DeliveryGetReq{DeliveryUuid: deliveryUuid.Bytes()}
-	resp, err := api.DeliveryServiceClient.DeliveryById(ctx, getReq)
+	resp, err := api.DeliveryServiceClient.DeliveryByDeliUuid(ctx, getReq)
 	if err != nil {
 		return nil, fmt.Errorf("DeliveryAPI DeliveryById request failed: %w", err)
+	}
+
+	delivery, err := models.DeliveryFromProto(resp)
+	if err != nil {
+		return nil, fmt.Errorf("failed to DeliveryById %w", err)
+	}
+	return delivery, nil
+}
+func (api *Api) DeliveryByOrderUuid(orderUuid uuid.UUID) (*models.Delivery, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), api.timeout)
+	defer cancel()
+	getReq := &proto.DeliveryGetReqByOrder{OrderUuid: orderUuid.Bytes()}
+	resp, err := api.DeliveryServiceClient.DeliveryByOrderUuid(ctx, getReq)
+	if err != nil {
+		return nil, fmt.Errorf("DeliveryAPI get delivery by order failed: %w", err)
 	}
 
 	delivery, err := models.DeliveryFromProto(resp)

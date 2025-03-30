@@ -8,12 +8,14 @@ import (
 
 type Delivery struct {
 	DeliveryUuid uuid.UUID `json:"delivery_uuid"`
+	OrderUuid    uuid.UUID `json:"order_uuid"`
 }
 
 // Proto is
 func Proto(deli *Delivery) (*proto.Delivery, error) {
 	d := &proto.Delivery{
 		DeliveryUuid: deli.DeliveryUuid.Bytes(),
+		OrderUuid:    deli.OrderUuid.Bytes(),
 	}
 	return d, nil
 }
@@ -21,6 +23,7 @@ func Proto(deli *Delivery) (*proto.Delivery, error) {
 func DeliveryFromProto(pb *proto.Delivery) (*Delivery, error) {
 	meal := &Delivery{
 		DeliveryUuid: uuid.FromBytesOrNil(pb.DeliveryUuid),
+		OrderUuid:    uuid.FromBytesOrNil(pb.OrderUuid),
 	}
 	return meal, nil
 }
