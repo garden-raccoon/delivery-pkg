@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gofrs/uuid"
+	"google.golang.org/grpc/backoff"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/health/grpc_health_v1"
 	"sync"
@@ -41,7 +42,7 @@ type Api struct {
 
 // New create new Battles Api instance
 func New(addr string, timeOut time.Duration) (DeliveryPkgAPI, error) {
-	api := &Api{timeout: timeOut * time.Second}
+	api := &Api{timeout: timeOut}
 
 	if err := api.initConn(addr); err != nil {
 		return nil, fmt.Errorf("create DeliveryApi:  %w", err)
@@ -100,12 +101,19 @@ func (api *Api) CreateOrUpdateDelivery(s *models.Delivery) (err error) {
 // initConn initialize connection to Grpc servers
 func (api *Api) initConn(addr string) (err error) {
 	var kacp = keepalive.ClientParameters{
-		Time:                10 * time.Second, // send pings every 10 seconds if there is no activity
-		Timeout:             time.Second,      // wait 1 second for ping ack before considering the connection dead
-		PermitWithoutStream: true,             // send pings even without active streams
+		Time:                5 * time.Second, // send pings every 10 seconds if there is no activity
+		Timeout:             time.Second,     // wait 1 second for ping ack before considering the connection dead
+		PermitWithoutStream: true,            // send pings even without active streams
 	}
-
-	api.ClientConn, err = grpc.NewClient(addr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithKeepaliveParams(kacp))
+	connParams := grpc.WithConnectParams(grpc.ConnectParams{
+		Backoff: backoff.Config{
+			BaseDelay:  100 * time.Millisecond,
+			Multiplier: 1.2,
+			MaxDelay:   1 * time.Second,
+		},
+		MinConnectTimeout: 5 * time.Second,
+	})
+	api.ClientConn, err = grpc.NewClient(addr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithKeepaliveParams(kacp), connParams)
 	if err != nil {
 		return fmt.Errorf("failed to dial: %w", err)
 	}
